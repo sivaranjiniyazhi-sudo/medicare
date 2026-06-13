@@ -15,7 +15,6 @@ interface SidebarItem {
 }
 
 const sidebarItems: SidebarItem[] = [
-  { icon: <Settings className="w-5 h-5" />, label: 'Settings', view: 'settings' },
   { icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard', view: 'dashboard' },
   { icon: <ShoppingCart className="w-5 h-5" />, label: 'Billing / POS', view: 'billing', roles: ['owner', 'cashier', 'pharmacist'] },
   { icon: <Package className="w-5 h-5" />, label: 'Medicines', view: 'medicines', roles: ['owner', 'pharmacist'] },
@@ -27,6 +26,7 @@ const sidebarItems: SidebarItem[] = [
   { icon: <BarChart3 className="w-5 h-5" />, label: 'Reports', view: 'reports', roles: ['owner'] },
   { icon: <MessageCircle className="w-5 h-5" />, label: 'Reminders', view: 'reminders' },
   { icon: <CreditCard className="w-5 h-5" />, label: 'Prescriptions', view: 'prescriptions' },
+  { icon: <Settings className="w-5 h-5" />, label: 'Settings', view: 'settings' },
   { icon: <UserCog className="w-5 h-5" />, label: 'Staff', view: 'staff', roles: ['owner'] },
 ];
 
