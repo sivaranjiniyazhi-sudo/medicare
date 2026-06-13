@@ -56,7 +56,17 @@ export function HomeView({ onNavigate }: { onNavigate: (view: string) => void })
       ] = await Promise.allSettled([
         supabase.from('invoices').select('total, created_at').eq('user_id', user.id).gte('created_at', today),
         supabase.from('invoices').select('total').eq('user_id', user.id).gte('created_at', monthStart),
-        supabase.from('invoice_items').select('quantity, selling_rate, purchase_rate, total').eq('user_id', user.id).gte('created_at', monthStart),
+        supabase.from('invoice_items')
+  .select(`
+    quantity,
+    total,
+    medicine_id,
+    medicines (
+      purchase_rate
+    )
+  `)
+  .eq('user_id', user.id)
+  .gte('created_at', monthStart),
         supabase.from('customers').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
         supabase.from('medicines').select('id, current_stock, min_stock_level').eq('user_id', user.id),
         supabase.from('medicines').select('id').eq('user_id', user.id).lt('expiry_date', new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()).gt('current_stock', 0),
@@ -77,9 +87,9 @@ export function HomeView({ onNavigate }: { onNavigate: (view: string) => void })
       const monthSales = monthInvoices?.reduce((sum, inv) => sum + Number(inv.total || 0), 0) || 0;
       const monthProfit = monthItems?.reduce((sum, item) => {
   const salesAmount = Number(item.total || 0);
-  const purchaseAmount = Number(item.purchase_rate || 0) * Number(item.quantity || 1);
+  const purchaseCost = Number(item.medicines?.purchase_rate || 0) * Number(item.quantity || 1);
 
-  return sum + (salesAmount - purchaseAmount);
+  return sum + (salesAmount - purchaseCost);
 }, 0) || 0;
       const lowStockCount = allMedicines?.filter(m => m.current_stock <= (m.min_stock_level || 10)).length || 0;
       const expiringCount = expiring?.length || 0;
