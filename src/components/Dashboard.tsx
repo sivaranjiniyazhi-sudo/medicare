@@ -27,7 +27,7 @@ const sidebarItems: SidebarItem[] = [
   { icon: <MessageCircle className="w-5 h-5" />, label: 'Reminders', view: 'reminders' },
   { icon: <CreditCard className="w-5 h-5" />, label: 'Prescriptions', view: 'prescriptions' },
   { icon: <UserCog className="w-5 h-5" />, label: 'Staff', view: 'staff', roles: ['owner'] },
-  { icon: <Settings className="w-5 h-5" />, label: 'Settings', view: 'settings', roles: ['owner'] },
+  { icon: <Settings className="w-5 h-5" />, label: 'Settings', view: 'settings' },
 ];
 
 interface DashboardProps {
