@@ -44,9 +44,14 @@ export function Dashboard({ children, currentView, onNavigate, alertsCount }: Da
   const userRole = role?.role || 'owner';
 
   const filteredItems = sidebarItems.filter(item => {
-    if (!item.roles) return true;
-    return item.roles.includes(userRole as 'owner' | 'cashier' | 'pharmacist');
-  });
+  if (!item.roles) return true;
+
+  if (item.view === 'settings') return true;
+
+  return item.roles.includes(
+    userRole as 'owner' | 'cashier' | 'pharmacist'
+  );
+});
 
   return (
     <div className="min-h-screen bg-gray-50">
