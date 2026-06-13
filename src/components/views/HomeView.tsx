@@ -76,10 +76,14 @@ export function HomeView({ onNavigate }: { onNavigate: (view: string) => void })
       const todayBills = todayInvoices?.length || 0;
       const monthSales = monthInvoices?.reduce((sum, inv) => sum + Number(inv.total || 0), 0) || 0;
       const monthProfit = monthItems?.reduce((sum, item) => {
-        const profit = Number(item.total || 0) - (Number(item.selling_rate || 0) * 0.8 * (item.quantity || 1));
-        return sum + Math.max(0, profit);
-      }, 0) || 0;
+      const selling = Number(item.selling_rate || 0);
+      const purchase = Number(item.purchase_rate || 0);
+      const qty = Number(item.quantity || 1);
 
+      const profit = (selling - purchase) * qty;
+
+      return sum + profit;
+      }, 0) || 0;
       const lowStockCount = allMedicines?.filter(m => m.current_stock <= (m.min_stock_level || 10)).length || 0;
       const expiringCount = expiring?.length || 0;
 
