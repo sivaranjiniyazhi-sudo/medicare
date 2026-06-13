@@ -72,10 +72,10 @@ export function ReportsView() {
     const avgBillValue = totalBills > 0 ? totalSales / totalBills : 0;
 
     const totalProfit = items?.reduce((sum, item) => {
-  const saleAmount = Number(item.total || 0);
-  const purchaseCost = Number(item.purchase_rate || 0) * Number(item.quantity || 1);
+  const salesAmount = Number(item.total || 0);
+  const purchaseAmount = Number(item.purchase_rate || 0) * Number(item.quantity || 1);
 
-  const profit = saleAmount - purchaseCost;
+  const profit = salesAmount - purchaseAmount;
 
   return sum + profit;
 }, 0) || 0;
