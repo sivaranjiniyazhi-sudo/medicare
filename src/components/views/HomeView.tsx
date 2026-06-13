@@ -56,7 +56,7 @@ export function HomeView({ onNavigate }: { onNavigate: (view: string) => void })
       ] = await Promise.allSettled([
         supabase.from('invoices').select('total, created_at').eq('user_id', user.id).gte('created_at', today),
         supabase.from('invoices').select('total').eq('user_id', user.id).gte('created_at', monthStart),
-        supabase.from('invoice_items').select('quantity, selling_rate, total').eq('user_id', user.id).gte('created_at', monthStart),
+        supabase.from('invoice_items').select('quantity, selling_rate, purchase_rate, total').eq('user_id', user.id).gte('created_at', monthStart),
         supabase.from('customers').select('id', { count: 'exact', head: true }).eq('user_id', user.id),
         supabase.from('medicines').select('id, current_stock, min_stock_level').eq('user_id', user.id),
         supabase.from('medicines').select('id').eq('user_id', user.id).lt('expiry_date', new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()).gt('current_stock', 0),
