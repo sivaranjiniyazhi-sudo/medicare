@@ -71,13 +71,11 @@ export function ReportsView() {
     const totalItems = items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
     const avgBillValue = totalBills > 0 ? totalSales / totalBills : 0;
 
-    // Calculate actual profit
-  const totalProfit = items?.reduce((sum, item) => {
-  const sellingRate = Number(item.selling_rate || 0);
-  const purchaseRate = Number(item.purchase_rate || 0);
-  const quantity = Number(item.quantity || 1);
+    const totalProfit = items?.reduce((sum, item) => {
+  const saleAmount = Number(item.total || 0);
+  const purchaseCost = Number(item.purchase_rate || 0) * Number(item.quantity || 1);
 
-  const profit = (sellingRate - purchaseRate) * quantity;
+  const profit = saleAmount - purchaseCost;
 
   return sum + profit;
 }, 0) || 0;
