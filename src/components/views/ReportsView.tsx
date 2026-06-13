@@ -60,10 +60,18 @@ export function ReportsView() {
       .gte('created_at', startDate.toISOString());
 
     const { data: items } = await supabase
-      .from('invoice_items')
-      .select('*')
-      .eq('user_id', user!.id)
-      .gte('created_at', startDate.toISOString());
+  .from('invoice_items')
+  .select(`
+    quantity,
+    total,
+    medicine_id,
+    medicine_name,
+    medicines (
+      purchase_rate
+    )
+  `)
+  .eq('user_id', user!.id)
+  .gte('created_at', startDate.toISOString());
 
     // Calculate stats
     const totalSales = invoices?.reduce((sum, inv) => sum + Number(inv.total), 0) || 0;
@@ -72,12 +80,16 @@ export function ReportsView() {
     const avgBillValue = totalBills > 0 ? totalSales / totalBills : 0;
 
     const totalProfit = items?.reduce((sum, item) => {
-  const salesAmount = Number(item.total || 0);
-  const purchaseAmount = Number(item.purchase_rate || 0) * Number(item.quantity || 1);
+  const sellingAmount = Number(item.total || 0);
 
-  const profit = salesAmount - purchaseAmount;
+  const purchaseRate = Number(
+    item.medicines?.purchase_rate || 0
+  );
 
-  return sum + profit;
+  const purchaseAmount = purchaseRate * Number(item.quantity || 1);
+
+  return sum + (sellingAmount - purchaseAmount);
+
 }, 0) || 0;
 
     // Top medicines
