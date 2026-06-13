@@ -71,11 +71,16 @@ export function ReportsView() {
     const totalItems = items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
     const avgBillValue = totalBills > 0 ? totalSales / totalBills : 0;
 
-    // Calculate profit (approximation)
-    const totalProfit = items?.reduce((sum, item) => {
-      const margin = Number(item.total) - (Number(item.selling_rate) * 0.8 * item.quantity);
-      return sum + Math.max(0, margin);
-    }, 0) || 0;
+    // Calculate actual profit
+  const totalProfit = items?.reduce((sum, item) => {
+  const sellingRate = Number(item.selling_rate || 0);
+  const purchaseRate = Number(item.purchase_rate || 0);
+  const quantity = Number(item.quantity || 1);
+
+  const profit = (sellingRate - purchaseRate) * quantity;
+
+  return sum + profit;
+}, 0) || 0;
 
     // Top medicines
     const medicineStats = new Map<string, { quantity: number; revenue: number }>();
